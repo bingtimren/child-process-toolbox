@@ -12,8 +12,9 @@ const child = child_process.spawn('bash',['-c','echo answer 42'])
 // the spawned child process's output can be seen on console
 tools.echoChildProcessOutput(child);
 // wait for a pattern to be outputed from the child process's outputs (stderr & stdout)
-await promiseOutputPattern(child, 'answer 24')
-await promiseOutputPattern(child, /answer [0-9]{2}/)
+await tools.promiseOutputPattern(child, 'answer 24')
+await tools.promiseOutputPattern(child, /answer [0-9]{2}/)
+await tools.promiseKilled(child)
 ```
 
 See unit test cases in "*.spec.ts" for example usages.
@@ -50,4 +51,32 @@ export function promiseOutputPattern(
     timeoutInMs?: number, // if provided, will wait for timeout and, if not resolved, reject with an error
     killProcessIfTimeout: boolean = false // if timed out & this option is true, kill the child process before rejects
 ): Promise<child_process.ChildProcessWithoutNullStreams> 
+```
+
+## promiseKilled
+
+Kill the process and return a promise that resolves the string killSignal (normally 'SIGTERM') or a numerical code (unlikely, unless the process exists normally before get killed) on the process's "exit" event.
+
+On "error" event of the process, the promise will be rejected.
+
+Parameters: 
+  process: the child process to kill (like one returned from child_process.spawn)
+  killSignal: optional, the signal to kill the child process, by default SIGTERM
+ 
+
+```Typescript
+export async function promiseKilled(
+  process: ChildProcess,
+  signal?: string
+): Promise<number | string> 
+```
+
+Usage example:
+
+```Typescript
+const child = child_process.spawn('bash', [
+  '-c',
+  'echo THE answer is...;sleep 1000000000000000;echo 42'
+]);
+const signal = await promiseKilled(child);
 ```

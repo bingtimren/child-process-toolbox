@@ -1,6 +1,6 @@
 {
   "name": "child-process-toolbox",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Helper functions to spawn and manage child processes, especially for writing shell utilities with Javascript / Typescript",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
