@@ -41,8 +41,8 @@ test('check output pattern (stderr)', async t => {
 
 test('check output pattern (pattern)', async t => {
   await t.notThrowsAsync(async () => {
-    const child = child_process.spawn('bash', ['-c', 'echo answer 42']);
-    await promiseOutputPattern(child, /answer [0-9]{2}/);
+    const child = child_process.spawn('bash', ['-c', 'echo THE answer 42']);
+    t.is('THE answer 42', await promiseOutputPattern(child, /answer [0-9]{2}/));
   });
 });
 
@@ -64,10 +64,13 @@ test('check output pattern (timeout)', async t => {
 test('check output pattern (with timeout but in time)', async t => {
   const child = child_process.spawn('bash', [
     '-c',
-    'sleep 1;echo ABC;sleep 2;echo DEF'
+    'sleep 1;echo 0123ABC4567;sleep 2;echo ***DEF***'
   ]);
   await t.notThrowsAsync(async () => {
-    await promiseOutputPattern(child, 'ABC', true, true, 2000, true);
+    t.is(
+      '0123ABC4567',
+      await promiseOutputPattern(child, 'ABC', true, true, 2000, true)
+    );
     // sleep 3 seconds where timeout trigger would have been fired
     await new Promise(resolve => {
       setTimeout(() => {
@@ -75,7 +78,7 @@ test('check output pattern (with timeout but in time)', async t => {
       }, 2000);
     });
     t.is(child.killed, false);
-    await promiseOutputPattern(child, 'DEF'); // still able to catch DEF output
+    t.is('***DEF***', await promiseOutputPattern(child, 'DEF')); // still able to catch DEF output
   });
   t.is(child.killed, false);
 });

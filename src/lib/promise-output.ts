@@ -5,7 +5,7 @@ import { Readable } from 'stream';
 function resolveOnPattern(
   stream: Readable,
   pattern: string | RegExp,
-  action: () => void
+  action: (line: string) => void
 ): void {
   if (stream) {
     const reader = readline.createInterface({ input: stream });
@@ -14,13 +14,13 @@ function resolveOnPattern(
         (typeof pattern === 'string' && line.indexOf(pattern) >= 0) ||
         (pattern instanceof RegExp && pattern.test(line))
       ) {
-        action();
+        action(line);
       }
     });
   }
 }
 /**
- * Return a Promise that resolve when a pattern to be outputed from the process's stdout or stderr
+ * Return a Promise that resolves to a string (line of output) when a pattern to be outputed from the process's stdout or stderr
  * @param process
  * @param pattern - string or RegExp to match against the output
  * @param watchStdout
@@ -35,14 +35,14 @@ export function promiseOutputPattern(
   watchStderr: boolean = true,
   timeoutInMs?: number,
   killProcessIfTimeout: boolean = false
-): Promise<child_process.ChildProcessWithoutNullStreams> {
+): Promise<string> {
   let solved = false;
   return new Promise((resolve, reject) => {
     // resolve function
-    const res = () => {
+    const res = (line: string) => {
       if (!solved) {
         solved = true;
-        resolve(process);
+        resolve(line);
       }
     };
     // fail function

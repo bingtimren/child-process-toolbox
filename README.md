@@ -12,9 +12,9 @@ const child = child_process.spawn('bash',['-c','echo answer 42'])
 // the spawned child process's output can be seen on console
 tools.echoChildProcessOutput(child);
 // wait for a pattern to be outputed from the child process's outputs (stderr & stdout)
-await tools.promiseOutputPattern(child, 'answer 24')
-await tools.promiseOutputPattern(child, /answer [0-9]{2}/)
-await tools.promiseKilled(child)
+const line = await tools.promiseOutputPattern(child, 'answer 24')
+const line2 = await tools.promiseOutputPattern(child, /answer [0-9]{2}/)
+const codeOrSignal = await tools.promiseKilled(child)
 ```
 
 See unit test cases in "*.spec.ts" for example usages.
@@ -41,6 +41,8 @@ function echoChildProcessOutput(
 Returns a Promise that resolves when a line of output from child process matches the given pattern. This is useful when starts a service using child_process.spawn(), and wish to wait until a line of output indicating the service is ready (like listening on an address, etc.)
 
 If the process exits or encounter an error before the expected output, the returned Promise will reject.
+
+The resolved value is the line of output that matches the pattern.
 
 ```Typescript
 export function promiseOutputPattern(
