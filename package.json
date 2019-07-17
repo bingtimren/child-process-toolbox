@@ -51,12 +51,7 @@
   "engines": {
     "node": ">=8.9"
   },
-  "dependencies": {
-    "lodash": "^4.17.14",
-    "lodash.merge": "^4.6.2",
-    "lodash.template": "^4.5.0",
-    "mem": "^5.1.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "ava": "1.0.0-beta.7",
     "codecov": "^3.1.0",
@@ -72,7 +67,11 @@
     "tslint-config-prettier": "^1.17.0",
     "tslint-immutable": "^5.0.0",
     "typedoc": "^0.14.2",
-    "typescript": "^3.1.6"
+    "typescript": "^3.1.6",
+    "lodash": "^4.17.14",
+    "lodash.merge": "^4.6.2",
+    "lodash.template": "^4.5.0",
+    "mem": "^5.1.1"
   },
   "ava": {
     "failFast": true,
