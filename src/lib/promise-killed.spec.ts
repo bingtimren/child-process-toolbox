@@ -13,3 +13,14 @@ test('promise killed', async t => {
     t.is(child.killed, true);
   });
 });
+
+test('promise-kill when error should throw', async t => {
+  const child = child_process.spawn('debracadebraonooi'); // error
+  try {
+    await promiseKilled(child);
+  } catch (e) {
+    t.is(e instanceof Error, true);
+    return t.pass();
+  }
+  t.fail();
+});

@@ -1,6 +1,6 @@
 {
   "name": "child-process-toolbox",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Helper functions to spawn and manage child processes, especially for writing shell utilities with Javascript / Typescript",
   "main": "build/main/index.js",
   "types": "build/main/index.d.ts",
@@ -19,7 +19,7 @@
     "fix:tslint": "tslint --fix --project .",
     "test": "run-s build test:*",
     "test:lint": "tslint --project . && prettier \"src/**/*.ts\" --list-different",
-    "test:unit": "nyc --silent ava",
+    "test:unit": "nyc ava",
     "watch": "run-s clean build:main && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
     "cov": "run-s build test:unit cov:html && opn coverage/index.html",
     "cov:html": "nyc report --reporter=html",
@@ -74,7 +74,7 @@
     "typescript": "^3.1.6"
   },
   "ava": {
-    "failFast": true,
+    "failFast": false,
     "files": [
       "build/main/**/*.spec.js"
     ]

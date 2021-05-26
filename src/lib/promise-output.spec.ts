@@ -72,7 +72,7 @@ test('check output pattern (with timeout but in time)', async t => {
       await promiseOutputPattern(child, 'ABC', true, true, 2000, true)
     );
     // sleep 3 seconds where timeout trigger would have been fired
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       setTimeout(() => {
         resolve();
       }, 2000);
