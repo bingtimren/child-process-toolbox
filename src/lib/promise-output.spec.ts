@@ -55,7 +55,7 @@ test('check output pattern (timeout)', async t => {
     async () => {
       await promiseOutputPattern(child, 'DEF', true, true, 10);
     },
-    Error,
+    null,
     'Wait timeout'
   );
   t.is(child.killed, false);
@@ -92,7 +92,7 @@ test('check output pattern (timeout, only stderr)', async t => {
     async () => {
       await promiseOutputPattern(child, 'ABC', false, true, 2000, true);
     },
-    Error,
+    null,
     'Wait timeout'
   );
 });
@@ -106,7 +106,7 @@ test('check output pattern (timeout & kill)', async t => {
     async () => {
       await promiseOutputPattern(child, 'DEF', true, true, 10, true);
     },
-    Error,
+    null,
     'Wait timeout'
   );
   t.is(child.killed, true);

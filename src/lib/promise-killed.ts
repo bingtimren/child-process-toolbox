@@ -9,7 +9,7 @@ import { ChildProcess } from 'child_process';
  */
 export async function promiseKilled(
   process: ChildProcess,
-  signal?: string
+  signal?: number | NodeJS.Signals
 ): Promise<number | string> {
   return new Promise((resolve, reject) => {
     process.on('exit', (code, killSignal) => {
