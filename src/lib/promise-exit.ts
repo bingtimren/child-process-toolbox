@@ -11,7 +11,7 @@ import * as child_process from 'child_process';
  * @returns the Promise
  */
 export function promiseExit(
-  process: child_process.ChildProcessWithoutNullStreams,
+  process: child_process.ChildProcess,
   timeoutInMs?: number,
   killProcessIfTimeout: boolean = false
 ): Promise<[number | null, NodeJS.Signals | null]> {
