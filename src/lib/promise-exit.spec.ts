@@ -1,6 +1,6 @@
 // tslint:disable:no-expression-statement
 import test from 'ava';
-import child_process from 'child_process';
+import * as child_process from 'child_process';
 import { promiseExit } from './promise-exit';
 
 test('check normal exit', async t => {

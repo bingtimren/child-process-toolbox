@@ -1,4 +1,4 @@
-import child_process from 'child_process';
+import * as child_process from 'child_process';
 
 /**
  * returns a Promise that resolves on the child process's exit event (

@@ -1,5 +1,5 @@
-import child_process from 'child_process';
-import readline from 'readline';
+import * as child_process from 'child_process';
+import * as readline from 'readline';
 import { Readable, Writable } from 'stream';
 
 function echoReadable(

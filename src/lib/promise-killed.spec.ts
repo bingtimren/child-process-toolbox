@@ -1,6 +1,6 @@
 // tslint:disable:no-expression-statement
 import test from 'ava';
-import child_process from 'child_process';
+import * as child_process from 'child_process';
 import { promiseKilled } from './promise-killed';
 test('promise killed', async t => {
   await t.notThrowsAsync(async () => {
