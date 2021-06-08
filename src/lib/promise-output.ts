@@ -63,6 +63,7 @@ export function promiseOutputPattern(
     // fail function
     function fail(message: string): () => void {
       return () => {
+        /* istanbul ignore else */
         if (!solved) {
           solved = true;
           reject(new Error(message));
