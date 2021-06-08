@@ -84,7 +84,7 @@ export function promiseOutputPattern(
             process.kill();
           }
           solved = true;
-          reject(new Error('Wait timeout'));
+          reject(new Error(`Timeout: pattern ${pattern.toString()} not found in output from process (pid=${process.pid})`));
         }
       }, options.timeoutInMs);
     }
