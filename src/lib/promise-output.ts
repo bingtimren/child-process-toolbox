@@ -75,7 +75,12 @@ export function promiseOutputPattern(
     if (options.watchStderr) {
       resolveOnPattern(process.stderr, pattern, res);
     }
-    process.on('exit', fail(`Process ended without pattern ${pattern.toString()} found in output`));
+    process.on(
+      'exit',
+      fail(
+        `Process ended without pattern ${pattern.toString()} found in output`
+      )
+    );
     process.on('error', fail('Process error'));
     if (options.timeoutInMs !== undefined) {
       setTimeout(() => {
