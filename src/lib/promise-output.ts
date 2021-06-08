@@ -3,7 +3,7 @@ import * as readline from 'readline';
 import { Readable } from 'stream';
 
 function resolveOnPattern(
-  stream: Readable,
+  stream: Readable | null,
   pattern: string | RegExp,
   action: (line: string) => void
 ): void {
@@ -29,7 +29,7 @@ function resolveOnPattern(
  * @param killProcessIfTimeout - when timeout, whether or not to kill the process before rejection
  */
 export function promiseOutputPattern(
-  process: child_process.ChildProcessWithoutNullStreams,
+  process: child_process.ChildProcess,
   pattern: string | RegExp,
   watchStdout: boolean = true,
   watchStderr: boolean = true,

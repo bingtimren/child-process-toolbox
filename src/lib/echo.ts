@@ -3,7 +3,7 @@ import * as readline from 'readline';
 import { Readable, Writable } from 'stream';
 
 function echoReadable(
-  input: Readable,
+  input: Readable | null,
   output: Writable,
   prefix?: string
 ): void {
@@ -23,7 +23,7 @@ function echoReadable(
  * @param options.errPrefix - prefix of each line from stderr
  */
 export function echoChildProcessOutput(
-  childProcess: child_process.ChildProcessWithoutNullStreams,
+  childProcess: child_process.ChildProcess,
   options: {
     parentProcess?: NodeJS.Process;
     outPrefix?: string;

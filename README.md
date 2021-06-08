@@ -25,7 +25,7 @@ This function watches the outputs from the child process and forward the outputs
 
 ```Typescript
 function echoChildProcessOutput(
-  childProcess: child_process.ChildProcessWithoutNullStreams, // child process returned from child_process.spawn()
+  childProcess: child_process.ChildProcess, // child process returned from child_process.spawn()
   options: {
     parentProcess?: NodeJS.Process; // default the global 'process'
     outPrefix?: string; // prefix string before each line of output from stdout
@@ -46,13 +46,13 @@ The resolved value is the line of output that matches the pattern.
 
 ```Typescript
 export function promiseOutputPattern(
-    process: child_process.ChildProcessWithoutNullStreams, // the child process
+    process: child_process.ChildProcess, // the child process
     pattern: string | RegExp, 
     watchStdout: boolean = true,
     watchStderr: boolean = true,
     timeoutInMs?: number, // if provided, will wait for timeout and, if not resolved, reject with an error
     killProcessIfTimeout: boolean = false // if timed out & this option is true, kill the child process before rejects
-): Promise<child_process.ChildProcessWithoutNullStreams> 
+): Promise<string> 
 ```
 
 ## promiseKilled
