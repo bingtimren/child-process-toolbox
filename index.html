@@ -1,0 +1,180 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>child-process-toolbox</title>
+	<meta name="description" content="Documentation for child-process-toolbox">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">child-process-toolbox</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>child-process-toolbox</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#child-process-tools" id="child-process-tools" style="color: inherit; text-decoration: none;">
+					<h1>child-process-tools</h1>
+				</a>
+				<p>Helper functions to spawn and manage child processes, especially for writing shell utilities with Javascript / Typescript</p>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<pre><code class="language-Javascript"><span style="color: #001080">child_process</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;child_process&#039;</span><span style="color: #000000">)</span>
+<span style="color: #001080">tools</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;child-process-toolbox&#039;</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">child</span><span style="color: #000000"> = </span><span style="color: #001080">child_process</span><span style="color: #000000">.</span><span style="color: #795E26">spawn</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bash&#039;</span><span style="color: #000000">,[</span><span style="color: #A31515">&#039;-c&#039;</span><span style="color: #000000">,</span><span style="color: #A31515">&#039;echo answer 42&#039;</span><span style="color: #000000">])</span>
+<span style="color: #008000">// channel child process&#039;s stderr &amp; stdout to the current process&#039;s stderr &amp; stdout, so that </span>
+<span style="color: #008000">// the spawned child process&#039;s output can be seen on console</span>
+<span style="color: #001080">tools</span><span style="color: #000000">.</span><span style="color: #795E26">echoChildProcessOutput</span><span style="color: #000000">(</span><span style="color: #001080">child</span><span style="color: #000000">);</span>
+<span style="color: #008000">// wait for a pattern to be outputed from the child process&#039;s outputs (stderr &amp; stdout)</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">line</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">tools</span><span style="color: #000000">.</span><span style="color: #795E26">promiseOutputPattern</span><span style="color: #000000">(</span><span style="color: #001080">child</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;answer 24&#039;</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">line2</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">tools</span><span style="color: #000000">.</span><span style="color: #795E26">promiseOutputPattern</span><span style="color: #000000">(</span><span style="color: #001080">child</span><span style="color: #000000">,</span><span style="color: #811F3F"> /answer </span><span style="color: #D16969">[</span><span style="color: #811F3F">0-9</span><span style="color: #D16969">]</span><span style="color: #000000">{2}</span><span style="color: #811F3F">/</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">codeOrSignal</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">tools</span><span style="color: #000000">.</span><span style="color: #795E26">promiseKilled</span><span style="color: #000000">(</span><span style="color: #001080">child</span><span style="color: #000000">)</span>
+</code></pre>
+				<p>See unit test cases in &quot;*.spec.ts&quot; for example usages.</p>
+				<a href="#echochildprocessoutput" id="echochildprocessoutput" style="color: inherit; text-decoration: none;">
+					<h2>echoChildProcessOutput</h2>
+				</a>
+				<p>This function watches the outputs from the child process and forward the outputs to the current process&#39;s outputs, so that the outputs of the child process can be observed from console. Useful for writing scripts that calls child_process.spawn() &amp; wants the output be seen.</p>
+				<pre><code class="language-Typescript"><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">echoChildProcessOutput</span><span style="color: #000000">(</span>
+<span style="color: #000000">  </span><span style="color: #001080">childProcess</span><span style="color: #000000">: </span><span style="color: #267F99">child_process</span><span style="color: #000000">.</span><span style="color: #267F99">ChildProcess</span><span style="color: #000000">, </span><span style="color: #008000">// child process returned from child_process.spawn()</span>
+<span style="color: #000000">  </span><span style="color: #001080">options</span><span style="color: #000000">: {</span>
+<span style="color: #000000">    </span><span style="color: #001080">parentProcess</span><span style="color: #000000">?: </span><span style="color: #267F99">NodeJS</span><span style="color: #000000">.</span><span style="color: #267F99">Process</span><span style="color: #000000">; </span><span style="color: #008000">// default the global &#039;process&#039;</span>
+<span style="color: #000000">    </span><span style="color: #001080">outPrefix</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">; </span><span style="color: #008000">// prefix string before each line of output from stdout</span>
+<span style="color: #000000">    </span><span style="color: #001080">errPrefix</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">; </span><span style="color: #008000">// prefix string before each line from stderr</span>
+<span style="color: #000000">    </span><span style="color: #001080">echoStdout</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">; </span><span style="color: #008000">// default true</span>
+<span style="color: #000000">    </span><span style="color: #001080">echoStderr</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">; </span><span style="color: #008000">// default true</span>
+<span style="color: #000000">  } = {}</span>
+<span style="color: #000000">)</span>
+</code></pre>
+				<a href="#promiseoutputpattern" id="promiseoutputpattern" style="color: inherit; text-decoration: none;">
+					<h2>promiseOutputPattern</h2>
+				</a>
+				<p>Returns a Promise that resolves when a line of output from child process matches the given pattern. This is useful when starts a service using child_process.spawn(), and wish to wait until a line of output indicating the service is ready (like listening on an address, etc.)</p>
+				<p>If the process exits or encounter an error before the expected output, the returned Promise will reject.</p>
+				<p>The resolved value is the line of output that matches the pattern.</p>
+				<pre><code class="language-Typescript"><span style="color: #008000">/**</span>
+<span style="color: #008000"> * Return a Promise that resolves to a string (line of output) when a pattern to be outputed from the process&#039;s stdout or stderr</span>
+<span style="color: #008000"> * </span><span style="color: #0000FF">@param</span><span style="color: #008000"> </span><span style="color: #001080">process</span>
+<span style="color: #008000"> * </span><span style="color: #0000FF">@param</span><span style="color: #008000"> </span><span style="color: #001080">pattern</span><span style="color: #008000"> - string or RegExp to match against the output</span>
+<span style="color: #008000"> * </span><span style="color: #0000FF">@param</span><span style="color: #008000"> </span><span style="color: #001080">options</span><span style="color: #008000"> - (optional) options</span>
+<span style="color: #008000"> *      - watchStdout</span>
+<span style="color: #008000"> *      - watchStderr</span>
+<span style="color: #008000"> *      - timeoutInMs - time in ms after which the Promise will be rejected</span>
+<span style="color: #008000"> *      - killProcessIfTimeout - when timeout, whether or not to kill the process before rejection</span>
+<span style="color: #008000"> */</span>
+</code></pre>
+				<a href="#promisekilled" id="promisekilled" style="color: inherit; text-decoration: none;">
+					<h2>promiseKilled</h2>
+				</a>
+				<p>Kill the process and return a promise that resolves the string killSignal (normally &#39;SIGTERM&#39;) or a numerical code (unlikely, unless the process exists normally before get killed) on the process&#39;s &quot;exit&quot; event.</p>
+				<p>On &quot;error&quot; event of the process, the promise will be rejected.</p>
+				<p>Parameters:
+					process: the child process to kill (like one returned from child_process.spawn)
+				killSignal: optional, the signal to kill the child process, by default SIGTERM</p>
+				<pre><code class="language-Typescript"><span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">promiseKilled</span><span style="color: #000000">(</span>
+<span style="color: #000000">  </span><span style="color: #001080">process</span><span style="color: #000000">: </span><span style="color: #267F99">ChildProcess</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">signal</span><span style="color: #000000">?: </span><span style="color: #267F99">number</span><span style="color: #000000"> | </span><span style="color: #267F99">NodeJS</span><span style="color: #000000">.</span><span style="color: #267F99">Signals</span>
+<span style="color: #000000">): </span><span style="color: #267F99">Promise</span><span style="color: #000000">&lt;</span><span style="color: #267F99">number</span><span style="color: #000000"> | </span><span style="color: #267F99">NodeJS</span><span style="color: #000000">.</span><span style="color: #267F99">Signals</span><span style="color: #000000">&gt; </span>
+</code></pre>
+				<p>Usage example:</p>
+				<pre><code class="language-Typescript"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">child</span><span style="color: #000000"> = </span><span style="color: #001080">child_process</span><span style="color: #000000">.</span><span style="color: #795E26">spawn</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bash&#039;</span><span style="color: #000000">, [</span>
+<span style="color: #000000">  </span><span style="color: #A31515">&#039;-c&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #A31515">&#039;echo THE answer is...;sleep 1000000000000000;echo 42&#039;</span>
+<span style="color: #000000">]);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">signal</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">promiseKilled</span><span style="color: #000000">(</span><span style="color: #001080">child</span><span style="color: #000000">);</span>
+</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/index.html">index</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_echo.html">lib/echo</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_promise_exit.html">lib/promise-<wbr>exit</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_promise_killed.html">lib/promise-<wbr>killed</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/lib_promise_output.html">lib/promise-<wbr>output</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
