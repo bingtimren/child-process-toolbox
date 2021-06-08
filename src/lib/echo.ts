@@ -7,6 +7,7 @@ function echoReadable(
   output: Writable,
   prefix?: string
 ): void {
+  /* istanbul ignore else */
   if (input) {
     const reader = readline.createInterface({ input });
     reader.on('line', line => {

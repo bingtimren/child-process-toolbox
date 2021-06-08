@@ -14,6 +14,36 @@ test('promise killed', async t => {
   });
 });
 
+test('promise killed, expect exit before kill', async t => {
+  await t.notThrowsAsync(async () => {
+    const child = child_process.spawn('bash', ['-c', 'echo THE answer is 42'], {
+      stdio: 'inherit'
+    });
+    await new Promise(resolve => {
+      setTimeout(resolve, 2000);
+    });
+    const code = await promiseKilled(child);
+    t.is(code, 0);
+    t.is(child.killed, false);
+    t.is(child.exitCode, 0);
+  });
+});
+
+test('promise killed, kill before promiseKill', async t => {
+  await t.notThrowsAsync(async () => {
+    const child = child_process.spawn('bash', ['-c', 'echo THE answer is 42'], {
+      stdio: 'inherit'
+    });
+    child.kill();
+    await new Promise(resolve => {
+      setTimeout(resolve, 500);
+    });
+    const signal = await promiseKilled(child);
+    t.is(signal, 'SIGTERM');
+    t.is(child.killed, true);
+  });
+});
+
 test('promise-kill when error should throw', async t => {
   const child = child_process.spawn('debracadebraonooi'); // error
   try {

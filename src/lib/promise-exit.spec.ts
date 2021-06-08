@@ -34,12 +34,15 @@ test('when error should throw', async t => {
   t.fail();
 });
 
-test('check timeout without kill', async t => {
+test('check timeout without kill, with sleep', async t => {
   const child = child_process.spawn('bash', ['-c', 'sleep 5;echo something']);
   const normalExitPromise = promiseExit(child);
   await t.throwsAsync(
     async () => {
-      await promiseExit(child, 500, false);
+      await promiseExit(child, {
+        killProcessIfTimeout: false,
+        timeoutInMs: 500
+      });
     },
     null,
     'Wait timeout'
@@ -49,12 +52,15 @@ test('check timeout without kill', async t => {
   t.is(normalExitResult[1], null);
 });
 
-test('check timeout and kill', async t => {
+test('check timeout and kill, exit before timeout', async t => {
   const child = child_process.spawn('bash', ['-c', 'sleep 5;echo something']);
   const normalExitPromise = promiseExit(child);
   await t.throwsAsync(
     async () => {
-      await promiseExit(child, 500, true);
+      await promiseExit(child, {
+        killProcessIfTimeout: true,
+        timeoutInMs: 500
+      });
     },
     null,
     'Wait timeout'
@@ -62,6 +68,24 @@ test('check timeout and kill', async t => {
   const normalExitResult = await normalExitPromise;
   t.is(normalExitResult[0], null);
   t.is(typeof normalExitResult[1], 'string');
+});
+
+test('check timeout without kill', async t => {
+  const child = child_process.spawn('bash', ['-c', 'sleep 1;echo something']);
+  const normalExitPromise = promiseExit(child, { timeoutInMs: 2000 });
+  await t.throwsAsync(
+    async () => {
+      await promiseExit(child, {
+        killProcessIfTimeout: false,
+        timeoutInMs: 200
+      });
+    },
+    null,
+    'Wait timeout'
+  );
+  const normalExitResult = await normalExitPromise;
+  t.is(normalExitResult[0], 0);
+  t.is(normalExitResult[1], null);
 });
 
 // test('check output pattern (with timeout but in time)', async t => {

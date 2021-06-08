@@ -10,5 +10,8 @@ test('echo child process (expect two lines of output)', async t => {
     echoChildProcessOutput(child, {
       outPrefix: 'life, universe and everything:'
     });
+    echoChildProcessOutput(child, { echoStderr: false });
+    echoChildProcessOutput(child, { echoStdout: false });
+    echoChildProcessOutput(child);
   });
 });

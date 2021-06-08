@@ -10,6 +10,16 @@ test('check output pattern (string)', async t => {
   });
 });
 
+test('check output pattern (dup string)', async t => {
+  await t.notThrowsAsync(async () => {
+    const child = child_process.spawn('bash', [
+      '-c',
+      'echo answer 42;echo answer 42'
+    ]);
+    await promiseOutputPattern(child, 'answer 42');
+  });
+});
+
 test('check output pattern (not found till end)', async t => {
   const child = child_process.spawn('bash', ['-c', 'echo answer 42']);
   try {
@@ -53,7 +63,11 @@ test('check output pattern (timeout)', async t => {
   ]);
   await t.throwsAsync(
     async () => {
-      await promiseOutputPattern(child, 'DEF', true, true, 10);
+      await promiseOutputPattern(child, 'DEF', {
+        timeoutInMs: 10,
+        watchStderr: true,
+        watchStdout: true
+      });
     },
     null,
     'Wait timeout'
@@ -69,7 +83,10 @@ test('check output pattern (with timeout but in time)', async t => {
   await t.notThrowsAsync(async () => {
     t.is(
       '0123ABC4567',
-      await promiseOutputPattern(child, 'ABC', true, true, 2000, true)
+      await promiseOutputPattern(child, 'ABC', {
+        killProcessIfTimeout: true,
+        timeoutInMs: 2000
+      })
     );
     // sleep 3 seconds where timeout trigger would have been fired
     await new Promise<void>(resolve => {
@@ -90,7 +107,36 @@ test('check output pattern (timeout, only stderr)', async t => {
   ]);
   await t.throwsAsync(
     async () => {
-      await promiseOutputPattern(child, 'ABC', false, true, 2000, true);
+      await promiseOutputPattern(child, 'ABC', {
+        killProcessIfTimeout: true,
+
+        timeoutInMs: 2000,
+
+        watchStderr: true,
+
+        watchStdout: false
+      });
+    },
+    null,
+    'Wait timeout'
+  );
+});
+
+test('check output pattern (timeout, only stdout)', async t => {
+  const child = child_process.spawn('bash', [
+    '-c',
+    '>&2 echo ABC;sleep 10;echo DEF'
+  ]);
+  await t.throwsAsync(
+    async () => {
+      await promiseOutputPattern(child, 'ABC', {
+        killProcessIfTimeout: true,
+        timeoutInMs: 2000,
+
+        watchStderr: false,
+
+        watchStdout: true
+      });
     },
     null,
     'Wait timeout'
@@ -104,7 +150,12 @@ test('check output pattern (timeout & kill)', async t => {
   ]);
   await t.throwsAsync(
     async () => {
-      await promiseOutputPattern(child, 'DEF', true, true, 10, true);
+      await promiseOutputPattern(child, 'DEF', {
+        killProcessIfTimeout: true,
+        timeoutInMs: 10,
+        watchStderr: true,
+        watchStdout: true
+      });
     },
     null,
     'Wait timeout'

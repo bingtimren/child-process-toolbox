@@ -45,14 +45,16 @@ If the process exits or encounter an error before the expected output, the retur
 The resolved value is the line of output that matches the pattern.
 
 ```Typescript
-export function promiseOutputPattern(
-    process: child_process.ChildProcess, // the child process
-    pattern: string | RegExp, 
-    watchStdout: boolean = true,
-    watchStderr: boolean = true,
-    timeoutInMs?: number, // if provided, will wait for timeout and, if not resolved, reject with an error
-    killProcessIfTimeout: boolean = false // if timed out & this option is true, kill the child process before rejects
-): Promise<string> 
+/**
+ * Return a Promise that resolves to a string (line of output) when a pattern to be outputed from the process's stdout or stderr
+ * @param process
+ * @param pattern - string or RegExp to match against the output
+ * @param options - (optional) options
+ *      - watchStdout
+ *      - watchStderr
+ *      - timeoutInMs - time in ms after which the Promise will be rejected
+ *      - killProcessIfTimeout - when timeout, whether or not to kill the process before rejection
+ */
 ```
 
 ## promiseKilled
@@ -69,8 +71,8 @@ Parameters:
 ```Typescript
 export async function promiseKilled(
   process: ChildProcess,
-  signal?: string
-): Promise<number | string> 
+  signal?: number | NodeJS.Signals
+): Promise<number | NodeJS.Signals> 
 ```
 
 Usage example:

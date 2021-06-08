@@ -10,14 +10,22 @@ import { ChildProcess } from 'child_process';
 export async function promiseKilled(
   process: ChildProcess,
   signal?: number | NodeJS.Signals
-): Promise<number | string> {
+): Promise<number | NodeJS.Signals> {
   return new Promise((resolve, reject) => {
     process.on('exit', (code, killSignal) => {
-      resolve(code !== null ? code : (killSignal as number | string)); // one of the two will be non-null per Node documentation
+      /* istanbul ignore next */
+      resolve(code !== null ? code : (killSignal as NodeJS.Signals)); // one of the two will be non-null per Node documentation
     });
     process.on('error', err => {
       reject(err);
     });
+    if (typeof process.exitCode === 'number' || process.killed) {
+      resolve(
+        process.exitCode !== null
+          ? process.exitCode
+          : (process.signalCode as NodeJS.Signals)
+      );
+    }
     process.kill(signal);
   });
 }
